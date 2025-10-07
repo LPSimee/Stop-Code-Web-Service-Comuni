@@ -1,12 +1,12 @@
 package it.stopcode.rest_api_comuni.models;
 
+import jakarta.persistence.Entity;
 import lombok.*;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class Comune {
     private int id;
     private String nome;
