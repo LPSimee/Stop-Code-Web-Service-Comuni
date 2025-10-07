@@ -1,6 +1,7 @@
 package it.stopcode.rest_api_comuni.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Entity
@@ -8,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comune {
+
+    @Id
     private int id;
     private String nome;
     private String codiceCatastale;
