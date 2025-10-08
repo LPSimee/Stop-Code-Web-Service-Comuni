@@ -12,7 +12,7 @@ public class ComuneService {
 
     public ComuneService(ComuneRepository comuneRepository) { this.comuneRepository = comuneRepository; }
 
-    List<Comune> findAllComuni(){
+    public List<Comune> findAllComuni(){
         return comuneRepository.findAll();
     };
 
