@@ -12,7 +12,6 @@ public interface ComuneRepository extends JpaRepository<Comune, Long> {
     @Query("SELECT c FROM Comune c WHERE c.codiceCatastale = ?1")
     Comune findByCodiceCatastale (String codiceCatastale);
 
-    // to create a new Comune
-
-
+    // to delete a specified Comune by the catastral code
+    void deleteByCodiceCatastale(String codiceCatastale);
 }
