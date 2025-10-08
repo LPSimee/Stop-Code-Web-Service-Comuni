@@ -47,15 +47,19 @@ CREATE TABLE `comuni` (
 -- Dump dei dati per la tabella `comuni`
 --
 
-INSERT INTO `comuni` (`id`, `nome`, `codice_catastale`, `provincia`, `cap`, `prefisso`, `mail`, `pec`, `telefono`, `fax`, `id_coordinata`) VALUES
-(1, 'Roma', 'H501', '058', '00186', '06', 'ld.gabinetto@comune.roma.it', 'protocollo.segretariato@pec.comune.roma.it', '+39 06/67102001', '+39 06/67103590', 1),
-(2, 'Milano', 'F205', '015', '20141', '02', 'stl.informagiovani@comune.milano.it', 'protocollo@postacert.comune.milano.it', '+39 02 0202', '+39 02 88452170', 2),
-(3, 'Napoli', 'F839', '063', '80127', '081', 'sindaco@comune.napoli.it', 'protocollo@pec.comune.napoli.it', '+39 081 7951111', '+39 081 7955509', 3);
-
 -- --------------------------------------------------------
 
 --
 -- Struttura della tabella `coordinate`
+--
+CREATE TABLE `coordinate` (
+  `id` int(11) NOT NULL,
+  `lat` double NOT NULL,
+  `lng` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `coordinate`
 --
 
 --
