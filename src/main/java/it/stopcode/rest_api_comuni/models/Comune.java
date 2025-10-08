@@ -21,5 +21,9 @@ public class Comune {
     private String pec;
     private String telefono;
     private String fax;
-    private String[] coordinate; // mettere il collegamento con l'altra entità
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_coordinata")
+    private Coordinata coordinate;
 }
