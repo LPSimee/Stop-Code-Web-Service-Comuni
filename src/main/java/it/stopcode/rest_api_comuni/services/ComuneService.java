@@ -1,11 +1,13 @@
 package it.stopcode.rest_api_comuni.services;
 
+import it.stopcode.rest_api_comuni.exeptions.ExistingComuneException;
 import it.stopcode.rest_api_comuni.models.Comune;
 import it.stopcode.rest_api_comuni.repositories.ComuneRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ComuneService {
@@ -23,6 +25,16 @@ public class ComuneService {
 
     @Transactional
     public Comune createComune(Comune comune){
+        if (comune.getId() != 0) {
+            throw new IllegalArgumentException("Non è possibile specificare l'ID durante la creazione di un nuovo Comune.");
+        }
+
+        String codiceCatastale = comune.getCodiceCatastale();
+
+        if (comuneRepository.existsByCodiceCatastale(codiceCatastale)) {
+            throw new ExistingComuneException();
+        }
+
         return comuneRepository.save(comune);
     }
 
