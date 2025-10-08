@@ -15,6 +15,7 @@ public class Comune {
 
     private String nome;
     private String codiceCatastale;
+    private String provincia;
     private String cap;
     private String prefisso;
     private String mail;
@@ -22,8 +23,7 @@ public class Comune {
     private String telefono;
     private String fax;
 
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_coordinata")
     private Coordinata coordinate;
 }
