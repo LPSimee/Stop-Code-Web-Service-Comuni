@@ -1,5 +1,6 @@
 package it.stopcode.rest_api_comuni.services;
 
+import it.stopcode.rest_api_comuni.exeptions.ComuneNotFoundException;
 import it.stopcode.rest_api_comuni.models.Comune;
 import it.stopcode.rest_api_comuni.repositories.ComuneRepository;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,9 @@ public class ComuneService {
 
     public Comune findComuneByCatastralCode(String code){
         return comuneRepository.findByCodiceCatastale(code);
+    }
+
+    public void deleteComuneByCatastralCode(String code){
+        comuneRepository.deleteByCodiceCatastale(code);
     }
 }
