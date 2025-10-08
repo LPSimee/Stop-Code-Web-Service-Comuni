@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ComuneRepository extends JpaRepository<Comune, Long> {
-    List<Comune> findAllComuni();
+
+    Comune findByCodiceCatastale (String codiceCatastale);
 }
