@@ -17,5 +17,5 @@ public interface ComuneRepository extends JpaRepository<Comune, Long> {
 
     // to delete a specified Comune by the cadastral code
     @Transactional
-    long deleteByCodiceCatastale(String codiceCatastale);
+    void deleteByCodiceCatastale(String codiceCatastale);
 }

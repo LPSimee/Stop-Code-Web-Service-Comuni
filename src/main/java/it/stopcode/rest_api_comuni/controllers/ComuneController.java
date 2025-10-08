@@ -26,7 +26,7 @@ public class ComuneController {
     Comune getComuneByCatCode(@PathVariable String codiceCatastale){
         return comuneService.findComuneByCodiceCatastale(codiceCatastale);
     }
-    // 1. CREAZIONE (POST)
+
     @PostMapping("/create")
     ResponseEntity<Map<String, String>> insertNewComune(@RequestBody Comune comuneDaCreare){
         Comune created = comuneService.createComune(comuneDaCreare);
@@ -34,21 +34,16 @@ public class ComuneController {
         Map<String, String> response = new HashMap<>();
 
         if(created != null) {
-            // Successo 201
             response.put("code", "201 CREATED");
             response.put("message", "Comune Aggiunto");
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } else {
-            // Fallimento (Qui gestiamo il 409 Conflict, o il 400 Bad Request se l'ID non è nullo)
-            // Assumiamo che sia il 409 Conflict per la duplicazione del codice catastale
             response.put("code", "409 CONFLICT");
             response.put("message", "Il Comune con codice catastale: " + comuneDaCreare.getCodiceCatastale() + " esiste già.");
-
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
     }
 
-    // 2. AGGIORNAMENTO (PUT)
     @PutMapping("/update/{codiceCatastale}")
     ResponseEntity<Map<String, String>> updateComuneByCatCode(@RequestBody Comune nuovoComune, @PathVariable String codiceCatastale){
         Comune updated = comuneService.updateComuneByCodiceCatastale(nuovoComune, codiceCatastale);
@@ -56,13 +51,10 @@ public class ComuneController {
         Map<String, String> response = new HashMap<>();
 
         if (updated != null) {
-            // Successo 200 OK
             response.put("code", "200 OK");
             response.put("message", "Dati Comune Aggiornati");
-            return ResponseEntity.ok(response); // Usa 200 OK
+            return ResponseEntity.ok(response);
         } else {
-            // Fallimento (404 Not Found o 409 Conflict)
-            // Visto che il Service ritorna null per entrambi, usiamo 404 come errore principale
             response.put("code", "404 NOT FOUND");
             response.put("message", "Aggiornamento fallito: Comune non trovato con codice catastale: " + codiceCatastale);
 
@@ -70,7 +62,6 @@ public class ComuneController {
         }
     }
 
-    // 3. ELIMINAZIONE (DELETE) - Già corretto
     @DeleteMapping("/delete/{codiceCatastale}")
     ResponseEntity<Map<String, String>> deleteComuneByCatCode(@PathVariable String codiceCatastale){
         boolean deleted = comuneService.deleteComuneByCodiceCatastale(codiceCatastale);
@@ -86,5 +77,6 @@ public class ComuneController {
             response.put("message", "Comune non trovato con codice catastale: " + codiceCatastale);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+
     }
 } // ComuneController

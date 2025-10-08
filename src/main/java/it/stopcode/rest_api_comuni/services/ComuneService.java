@@ -1,7 +1,5 @@
 package it.stopcode.rest_api_comuni.services;
 
-import it.stopcode.rest_api_comuni.exeptions.ComuneNotFoundException;
-import it.stopcode.rest_api_comuni.exeptions.ExistingComuneException;
 import it.stopcode.rest_api_comuni.models.Comune;
 import it.stopcode.rest_api_comuni.repositories.ComuneRepository;
 import jakarta.transaction.Transactional;
@@ -28,21 +26,18 @@ public class ComuneService {
 
     @Transactional
     public Comune createComune(Comune comune){
-
         String codiceCatastale = comune.getCodiceCatastale();
 
         if (comuneRepository.existsByCodiceCatastale(codiceCatastale)) {
-            return null; // CONFLITTO (409)
+            return null;
         }
 
         return comuneRepository.save(comune);
     }
 
-    // 2. AGGIORNAMENTO (PUT)
     @Transactional
     public Comune updateComuneByCodiceCatastale(Comune comuneDaInserire, String codiceCatastale){
 
-        // BUG FIX 1: Trova l'entità esistente tramite Optional, se assente ritorna null (404)
         Optional<Comune> comuneOpt = comuneRepository.findByCodiceCatastale(codiceCatastale);
 
         if (comuneOpt.isEmpty()){
@@ -72,10 +67,30 @@ public class ComuneService {
         return comuneRepository.save(comuneAggiornato);
     }
 
-    // 3. ELIMINAZIONE (DELETE) - Già Corretto, restituisce true/false
     @Transactional
     public boolean deleteComuneByCodiceCatastale(String code){
-        long deletedCount = comuneRepository.deleteByCodiceCatastale(code);
-        return deletedCount > 0;
+        if (!comuneRepository.existsByCodiceCatastale(code)) {
+            return false; // Comune non trovato (404)
+        }
+
+        comuneRepository.deleteByCodiceCatastale(code);
+        return true;
     }
+
+//    @Transactional
+//    public boolean deleteComuneById(Long id) {
+//
+//        // 1. Controllo esistenza (per il 404 Not Found)
+//        if (!comuneRepository.existsById(id)) {
+//            return false; // Comune non trovato (404)
+//        }
+//
+//        // 2. Eliminazione
+//        // Grazie a CascadeType.ALL sul modello Comune, questa operazione
+//        // eliminerà anche le Coordinate associate.
+//        comuneRepository.deleteById(id);
+//
+//        // L'eliminazione è riuscita
+//        return true;
+//    }
 }
