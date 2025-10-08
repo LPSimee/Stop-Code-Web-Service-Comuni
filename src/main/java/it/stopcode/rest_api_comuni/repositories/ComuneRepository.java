@@ -8,5 +8,11 @@ import java.util.List;
 
 public interface ComuneRepository extends JpaRepository<Comune, Long> {
 
+    // to return a specific Comune by its Catastral Code
+    @Query("SELECT c FROM Comune c WHERE c.codiceCatastale = ?1")
     Comune findByCodiceCatastale (String codiceCatastale);
+
+    // to create a new Comune
+
+
 }
