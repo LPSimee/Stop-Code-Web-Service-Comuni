@@ -1,5 +1,7 @@
 package it.stopcode.rest_api_comuni.services;
 
+import it.stopcode.rest_api_comuni.exeptions.ComuneNotFoundException;
+import it.stopcode.rest_api_comuni.exeptions.ExistingComuneException;
 import it.stopcode.rest_api_comuni.models.Comune;
 import it.stopcode.rest_api_comuni.repositories.ComuneRepository;
 import jakarta.transaction.Transactional;
@@ -21,7 +23,7 @@ public class ComuneService {
 
     @Transactional
     public Comune findComuneByCodiceCatastale(String code){
-        return comuneRepository.findByCodiceCatastale(code).orElse(null);
+        return comuneRepository.findByCodiceCatastale(code).orElseThrow(() -> new ComuneNotFoundException(code));
     }
 
     @Transactional
@@ -29,7 +31,7 @@ public class ComuneService {
         String codiceCatastale = comune.getCodiceCatastale();
 
         if (comuneRepository.existsByCodiceCatastale(codiceCatastale)) {
-            return null;
+            throw new ExistingComuneException();
         }
 
         return comuneRepository.save(comune);
@@ -41,7 +43,7 @@ public class ComuneService {
         Optional<Comune> comuneOpt = comuneRepository.findByCodiceCatastale(codiceCatastale);
 
         if (comuneOpt.isEmpty()){
-            return null; // NOT FOUND (404)
+            throw new ComuneNotFoundException(codiceCatastale); // NOT FOUND (404)
         }
 
         Comune comuneAggiornato = comuneOpt.get();
@@ -76,21 +78,4 @@ public class ComuneService {
         comuneRepository.deleteByCodiceCatastale(code);
         return true;
     }
-
-//    @Transactional
-//    public boolean deleteComuneById(Long id) {
-//
-//        // 1. Controllo esistenza (per il 404 Not Found)
-//        if (!comuneRepository.existsById(id)) {
-//            return false; // Comune non trovato (404)
-//        }
-//
-//        // 2. Eliminazione
-//        // Grazie a CascadeType.ALL sul modello Comune, questa operazione
-//        // eliminerà anche le Coordinate associate.
-//        comuneRepository.deleteById(id);
-//
-//        // L'eliminazione è riuscita
-//        return true;
-//    }
 }
