@@ -1,6 +1,7 @@
 package it.stopcode.rest_api_comuni.repositories;
 
 import it.stopcode.rest_api_comuni.models.Comune;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,5 +14,6 @@ public interface ComuneRepository extends JpaRepository<Comune, Long> {
     boolean existsByCodiceCatastale(String codiceCatastale);
 
     // to delete a specified Comune by the cadastral code
-    void deleteByCodiceCatastale(String codiceCatastale);
+    @Transactional
+    long deleteByCodiceCatastale(String codiceCatastale);
 }
