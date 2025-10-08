@@ -22,7 +22,7 @@ public class ComuneController {
 
     @GetMapping("/get/{codiceCatastale}")
     Comune getComuneByCatCode(@PathVariable String codiceCatastale){
-        return comuneService.findComuneByCatastralCode(codiceCatastale);
+        return comuneService.findComuneByCadastralCode(codiceCatastale);
     }
 
     @DeleteMapping("/delete/{codiceCatastale}")
