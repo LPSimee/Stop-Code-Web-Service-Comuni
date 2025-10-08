@@ -23,7 +23,7 @@ public class Comune {
     private String telefono;
     private String fax;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_coordinata")
     private Coordinata coordinate;
 }

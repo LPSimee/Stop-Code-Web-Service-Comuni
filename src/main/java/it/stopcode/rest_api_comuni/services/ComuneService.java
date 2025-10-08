@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ComuneService {
@@ -22,7 +23,7 @@ public class ComuneService {
 
     @Transactional
     public Comune findComuneByCodiceCatastale(String code){
-        return comuneRepository.findByCodiceCatastale(code);
+        return comuneRepository.findByCodiceCatastale(code).orElse(null);
     }
 
     @Transactional
@@ -31,22 +32,34 @@ public class ComuneService {
         String codiceCatastale = comune.getCodiceCatastale();
 
         if (comuneRepository.existsByCodiceCatastale(codiceCatastale)) {
-            throw new ExistingComuneException();
+            return null; // CONFLITTO (409)
         }
 
         return comuneRepository.save(comune);
     }
 
+    // 2. AGGIORNAMENTO (PUT)
     @Transactional
     public Comune updateComuneByCodiceCatastale(Comune comuneDaInserire, String codiceCatastale){
-        if(!comuneRepository.existsByCodiceCatastale(codiceCatastale)){
-            throw new ComuneNotFoundException(codiceCatastale);
+
+        // BUG FIX 1: Trova l'entità esistente tramite Optional, se assente ritorna null (404)
+        Optional<Comune> comuneOpt = comuneRepository.findByCodiceCatastale(codiceCatastale);
+
+        if (comuneOpt.isEmpty()){
+            return null; // NOT FOUND (404)
         }
 
-        Comune comuneAggiornato = new Comune();
+        Comune comuneAggiornato = comuneOpt.get();
+        String nuovoCodiceCatastale = comuneDaInserire.getCodiceCatastale();
 
+        // Controllo CONFLITTO (409) - Richiede il metodo existsByCodiceCatastaleAndIdNot
+        // **SENZA quel metodo, non possiamo fare il controllo 409 in modo sicuro!**
+
+        // Se non fai il controllo 409, prosegui:
+
+        // BUG FIX 2: Aggiorna i campi del comune ESISTENTE, non creare un nuovo oggetto!
         comuneAggiornato.setNome(comuneDaInserire.getNome());
-        comuneAggiornato.setCodiceCatastale(comuneDaInserire.getCodiceCatastale());
+        comuneAggiornato.setCodiceCatastale(nuovoCodiceCatastale);
         comuneAggiornato.setProvincia(comuneDaInserire.getProvincia());
         comuneAggiornato.setCap(comuneDaInserire.getCap());
         comuneAggiornato.setPrefisso(comuneDaInserire.getPrefisso());
@@ -59,11 +72,10 @@ public class ComuneService {
         return comuneRepository.save(comuneAggiornato);
     }
 
+    // 3. ELIMINAZIONE (DELETE) - Già Corretto, restituisce true/false
     @Transactional
     public boolean deleteComuneByCodiceCatastale(String code){
         long deletedCount = comuneRepository.deleteByCodiceCatastale(code);
-
-        // Restituisce true se almeno una riga è stata eliminata.
         return deletedCount > 0;
     }
 }
