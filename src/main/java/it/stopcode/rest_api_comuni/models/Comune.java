@@ -24,5 +24,5 @@ public class Comune {
     private String pec;
     private String telefono;
     private String fax;
-    private String[] coordinate;
+    private String[] coordinate; // mettere il collegamento con l'altra entità
 }
