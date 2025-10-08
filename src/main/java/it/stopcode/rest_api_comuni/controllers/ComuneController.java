@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/comuni")
+@RequestMapping("/api/comuni")
 public class ComuneController {
     private final ComuneService comuneService;
 
