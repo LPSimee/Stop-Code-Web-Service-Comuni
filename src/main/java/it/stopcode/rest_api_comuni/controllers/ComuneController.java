@@ -2,6 +2,7 @@ package it.stopcode.rest_api_comuni.controllers;
 
 import it.stopcode.rest_api_comuni.models.Comune;
 import it.stopcode.rest_api_comuni.services.ComuneService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,6 @@ public class ComuneController {
     @DeleteMapping("/delete/{codiceCatastale}")
     ResponseEntity<Void> deleteComuneByCatCode(@PathVariable String codiceCatastale){
 
-        return null;
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
     }
 }

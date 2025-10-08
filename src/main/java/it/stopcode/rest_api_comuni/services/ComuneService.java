@@ -21,6 +21,10 @@ public class ComuneService {
         return comuneRepository.findByCodiceCatastale(code);
     }
 
+    public Comune createComune(Comune comune){
+        return comuneRepository.save(comune);
+    }
+
     public void deleteComuneByCatastralCode(String code){
         comuneRepository.deleteByCodiceCatastale(code);
     }
