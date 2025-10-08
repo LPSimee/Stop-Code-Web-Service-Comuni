@@ -15,4 +15,8 @@ public class ComuneService {
     List<Comune> findAllComuni(){
         return comuneRepository.findAll();
     };
+
+    Comune findComuneByCatastralCode(String code){
+        return comuneRepository.findByCodiceCatastale(code);
+    }
 }
