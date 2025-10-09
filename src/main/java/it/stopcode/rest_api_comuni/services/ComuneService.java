@@ -43,18 +43,12 @@ public class ComuneService {
         Optional<Comune> comuneOpt = comuneRepository.findByCodiceCatastale(codiceCatastale);
 
         if (comuneOpt.isEmpty()){
-            throw new ComuneNotFoundException(codiceCatastale); // NOT FOUND (404)
+            throw new ComuneNotFoundException(codiceCatastale);
         }
 
         Comune comuneAggiornato = comuneOpt.get();
         String nuovoCodiceCatastale = comuneDaInserire.getCodiceCatastale();
 
-        // Controllo CONFLITTO (409) - Richiede il metodo existsByCodiceCatastaleAndIdNot
-        // **SENZA quel metodo, non possiamo fare il controllo 409 in modo sicuro!**
-
-        // Se non fai il controllo 409, prosegui:
-
-        // BUG FIX 2: Aggiorna i campi del comune ESISTENTE, non creare un nuovo oggetto!
         comuneAggiornato.setNome(comuneDaInserire.getNome());
         comuneAggiornato.setCodiceCatastale(nuovoCodiceCatastale);
         comuneAggiornato.setProvincia(comuneDaInserire.getProvincia());
@@ -72,7 +66,7 @@ public class ComuneService {
     @Transactional
     public boolean deleteComuneByCodiceCatastale(String code){
         if (!comuneRepository.existsByCodiceCatastale(code)) {
-            return false; // Comune non trovato (404)
+            return false;
         }
 
         comuneRepository.deleteByCodiceCatastale(code);
